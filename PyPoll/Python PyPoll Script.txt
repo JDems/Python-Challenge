@@ -1,0 +1,68 @@
+import os
+import csv
+
+#Creating the path for the file
+#election_data = os.path.join("Resources", "election_data.csv")
+election_data = "PyPoll\Resources\election_data.csv"
+
+#Listing variables
+total_votes = 0
+candidates = {}
+winner_votes = 0
+winner = ""
+
+#Opening csv file & reading data
+with open(election_data) as csvfile:
+        csvreader = csv.reader(csvfile, delimiter=",")
+        header = next(csvreader)
+
+        #Using for to loop through the data
+        for row in csvreader:
+                
+            #The total number of votes cast
+            total_votes += 1
+
+            #Add candidate to list of candidates
+            candidate = row [2]
+            if candidate not in candidates:
+                  candidates[candidate] = 0
+
+            #Candidate vote count
+            candidates[candidate] += 1
+
+#Print the election results
+print("Election Results")
+print("-------------------------")
+print(f"Total Votes: {total_votes}")
+print("-------------------------")
+
+
+for candidate, votes in candidates.items():
+      percent_votes = votes / total_votes * 100
+      print(f"{candidate}: {percent_votes:.3f}% ({votes})")
+
+      if votes > winner_votes:
+            winner_votes = votes
+            winner = candidate
+
+print("-------------------------")
+print(f"Winner: {winner}")
+print("-------------------------")
+
+#Final script print the analysis to the terminal and export a text file with the results
+output_path = "election_results.txt"
+with open(output_path, "w") as outfile:
+    outfile.write("Election Results\n")
+    outfile.write("-------------------------\n")
+    outfile.write(f"Total Votes: {total_votes}\n")
+    outfile.write("-------------------------\n")
+
+
+    for candidate, votes in candidates.items():
+        percent_votes = votes / total_votes * 100
+        outfile.write(f"{candidate}: {percent_votes:.3f}% ({votes})\n")
+
+
+    outfile.write("-------------------------\n")
+    outfile.write(f"Winner: {winner}\n")
+    outfile.write("-------------------------\n")
